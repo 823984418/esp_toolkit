@@ -156,22 +156,9 @@ void jtag_esp_remote_process(int connect) {
                 bool read = cmd.scan.read;
 
                 if (cmd.scan.flip_tms) {
-                    uint8_t last_buff = buff[bytes - 1];
-                    jtag_transport(&jtag, bits, buff, read ? buff : NULL);
-                    uint8_t last_bit = 1 << ((bits - 1) & 7);
-                    jtag_tms_set(&jtag, 1);
-                    if (jtag_clk_with(&jtag, (last_buff & last_bit) != 0)) {
-                        if (read) {
-                            buff[bytes - 1] |= last_bit;
-                        }
-                    } else {
-                        if (read) {
-                            buff[bytes - 1] &= ~last_bit;
-                        }
-                    };
-                    jtag_tms_set(&jtag, 0);
+                    jtag_transport_last_tms(&jtag, bits, buff, read ? buff : NULL);
                 } else {
-                    jtag_transport(&jtag, bits, buff, buff);
+                    jtag_transport(&jtag, bits, buff, read ? buff : NULL);
                 }
 
                 if (read) {

@@ -29,6 +29,8 @@ void jtag_tms_set(jtag_device_t *jtag, uint32_t level);
 
 void jtag_transport(jtag_device_t *jtag, size_t bits, const uint8_t *transmit, uint8_t *receive);
 
+void jtag_transport_last_tms(jtag_device_t *jtag, size_t bits, const uint8_t *tdo_buff, uint8_t *tdi_buff);
+
 uint8_t jtag_clk_with(jtag_device_t *jtag, uint32_t tdo_level);
 
 void jtag_state_move(jtag_device_t *jtag, size_t bits, const uint8_t *tms_buff);

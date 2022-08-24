@@ -45,6 +45,25 @@ void jtag_transport(jtag_device_t *jtag, size_t bits, const uint8_t *tdo_buff, u
     ESP_ERROR_CHECK(spi_device_polling_transmit(jtag->spi_device_handle, &spiTransaction));
 }
 
+void jtag_transport_last_tms(jtag_device_t *jtag, size_t bits, const uint8_t *tdo_buff, uint8_t *tdi_buff) {
+    size_t bytes = (bits + 7) / 8;
+    uint8_t last_tdo_buff = tdo_buff[bytes - 1];
+    uint8_t last_bit = 1 << ((bits - 1) & 7);
+    jtag_transport(jtag, bits - 1, tdo_buff, tdi_buff);
+    jtag_tms_set(jtag, 1);
+    if (jtag_clk_with(jtag, (last_tdo_buff & last_bit) != 0)) {
+        if (tdi_buff) {
+            tdi_buff[bytes - 1] |= last_bit;
+        }
+    } else {
+        if (tdi_buff) {
+            tdi_buff[bytes - 1] &= ~last_bit;
+        }
+    };
+    jtag_tms_set(jtag, 0);
+}
+
+
 uint8_t jtag_clk_with(jtag_device_t *jtag, uint32_t tdo_level) {
     uint8_t data;
     if (tdo_level) {
