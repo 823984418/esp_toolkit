@@ -149,9 +149,9 @@ void jtag_esp_remote_process(int connect) {
                     break;
                 }
                 for (size_t i = 0; i < bytes; i++) {
-                    printf("%02X ", buff[i]);
+                    ESP_LOGI("", "%02X ", buff[i] & 0xFF);
                 }
-                printf("\n");
+                ESP_LOGI("", "\n");
 
                 bool read = cmd.scan.read;
 
@@ -163,9 +163,9 @@ void jtag_esp_remote_process(int connect) {
 
                 if (read) {
                     for (size_t i = 0; i < bytes; i++) {
-                        printf("%02X ", buff[i]);
+                        ESP_LOGI("", "%02X ", buff[i] & 0xFF);
                     }
-                    printf("\n");
+                    ESP_LOGI("", "\n");
                     len = send(connect, buff, bytes, 0);
                     if (len != bytes) {
                         ESP_LOGE(TAG, "failed to send %d: %d\n", len, errno);
@@ -187,9 +187,9 @@ void jtag_esp_remote_process(int connect) {
                     break;
                 }
                 for (size_t i = 0; i < bytes; i++) {
-                    printf("%02X ", buff[i]);
+                    ESP_LOGI("", "%02X ", buff[i] & 0xFF);
                 }
-                printf("\n");
+                ESP_LOGI("", "\n");
                 jtag_state_move(&jtag, bits, buff);
                 break;
             }
