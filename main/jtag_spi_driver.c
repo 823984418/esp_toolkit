@@ -4,8 +4,8 @@
 void jtag_initialize(jtag_device_t *jtag) {
     ESP_ERROR_CHECK(gpio_set_direction(jtag->config.tms_io_num, GPIO_MODE_OUTPUT));
     spi_bus_config_t spiBusConfig = {
-        .mosi_io_num = jtag->config.tdo_io_num,
-        .miso_io_num = jtag->config.tdi_io_num,
+        .mosi_io_num = jtag->config.tdi_io_num,
+        .miso_io_num = jtag->config.tdo_io_num,
         .sclk_io_num = jtag->config.tck_io_num,
         .quadwp_io_num = GPIO_NUM_NC,
         .quadhd_io_num = GPIO_NUM_NC,
